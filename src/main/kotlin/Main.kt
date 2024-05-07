@@ -1,31 +1,17 @@
-import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import Ventana_1_Funcion.Ventanas
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 
-@Composable
-@Preview
-fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
+fun main() = application{
+    val studentsViewModel :IStudentsVM = StudentsViewModelDB()
+    studentsViewModel.cargarEstudiantes()
 
-    MaterialTheme {
-        Button(onClick = {
-            text = "Hello, Desktop!"
-        }) {
-            Text(text)
-        }
+    Window(
+        visible = true ,
+        onCloseRequest = ::exitApplication
+    ){
+        Ventanas(
+            studentsViewModel)
     }
-}
 
-fun main() = application {
-    Window(onCloseRequest = ::exitApplication) {
-        App()
-    }
 }

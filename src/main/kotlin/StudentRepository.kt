@@ -4,30 +4,7 @@ import java.sql.SQLException
 import java.sql.SQLTimeoutException
 import java.sql.Statement
 
-object Database {
-    private const val URL = "jdbc:mysql://localhost:3306/studentdb"
-    private const val USER = "studentuser"
-    private const val PASSWORD = "password"
-
-    init {
-        try {
-            // Asegurarse de que el driver JDBC de MySQL esté disponible
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (e: ClassNotFoundException) {
-            e.printStackTrace();
-        }
-    }
-
-    fun getConnection(): Connection =
-        try {
-            DriverManager.getConnection(URL, USER, PASSWORD)
-        } catch (e: SQLTimeoutException) {
-            //throw DatabaseTimeoutException("La conexión ha excedido el tiempo de espera permitido.")
-            TODO()
-        } catch (e: SQLException) {
-            //throw SqlErrorException("Error de SQL: ${e.message}")
-            TODO()
-        }
+class StudentRepository(){
 
 // NO HAY QUE TOCAR NADA, YA FUNCIONA SIN EL .USE
     fun getAllStudents(): Result<List<String>> {
@@ -98,11 +75,30 @@ object Database {
         return Result.success(Unit)
     }
 
-    fun closeConnection(connection: Connection){
+    fun deleteStudents(): Result<Unit>{
+        var connection: Connection? = null
+        var statement: Statement? = null
         try {
+            connection=Database.getConnection()
+            connection.autoCommit = false
+            statement = connection.createStatement()
+            val query = "DELETE FROM students"
+            statement.executeQuery(query)
             connection.close()
-        }catch (e: SQLException){
-            TODO()
+            statement.close()
+            return Result.success(Unit)
         }
+        catch (e:Exception){
+            connection?.close()
+            statement?.close()
+            return Result.failure(e)
+        }
+        finally {
+            connection?.autoCommit = true
+        }
+    }
+
+    fun deleteStudent(studentId: Int){
+
     }
 }
