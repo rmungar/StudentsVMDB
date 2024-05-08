@@ -16,7 +16,7 @@ interface IStudentsVM {
 
     val newStudent: State<String>
 
-    val students: SnapshotStateList<String>
+    val students: SnapshotStateList<Pair<Int,String>>
 
     val showInfoMessage: State<Boolean>
 

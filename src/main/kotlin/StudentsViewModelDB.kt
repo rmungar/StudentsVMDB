@@ -6,12 +6,14 @@ import androidx.compose.runtime.snapshots.SnapshotStateList
 
 class StudentsViewModelDB:IStudentsVM {
 
+
+
     private val studentRepository = StudentRepository()
 
     private val _newStudent = mutableStateOf("")
     override val newStudent: State<String> = _newStudent
 
-    private val _students = mutableStateListOf<String>()
+    private val _students = mutableStateListOf<Pair<Int,String>>()
     override var students = _students
 
     private val _showInfoMessage = mutableStateOf(false)
@@ -25,7 +27,7 @@ class StudentsViewModelDB:IStudentsVM {
 
     override fun addEstudiante() {
         if (_newStudent.value.isNotBlank()) {
-            _students.add(_newStudent.value.trim())
+            _students.add(Pair(contadorIDS(),_newStudent.value.trim()))
             _newStudent.value = ""
         }
     }
@@ -36,12 +38,13 @@ class StudentsViewModelDB:IStudentsVM {
         }
     }
 
-    override fun borrarEstudiante(indice: Int) {
-        TODO("Not yet implemented")
+    override fun borrarEstudiante(indice: Int){
+        val estudiante = _students[indice]
+        studentRepository.deleteStudent(estudiante.first)
     }
 
     override fun cargarEstudiantes() {
-        studentRepository.getAllStudents()
+        _students.addAll(studentRepository.getAllStudents().getOrThrow())
     }
 
     override fun guardarEstudiante(lista: List<String>) {
@@ -58,5 +61,11 @@ class StudentsViewModelDB:IStudentsVM {
 
     override fun estudianteSeleccionado(indice: Int) {
         _selectedIndex.value = indice
+    }
+
+    private fun contadorIDS(): Int{
+        var cont = _students[_students.size - 1].first
+        cont ++
+        return cont
     }
 }

@@ -1,26 +1,24 @@
 import java.sql.Connection
-import java.sql.DriverManager
 import java.sql.SQLException
-import java.sql.SQLTimeoutException
 import java.sql.Statement
 
 class StudentRepository(){
 
 // NO HAY QUE TOCAR NADA, YA FUNCIONA SIN EL .USE
-    fun getAllStudents(): Result<List<String>> {
+    fun getAllStudents(): Result<List<Pair<Int,String>>> {
 
         var connectionDb: Connection? = null
         var stmt : Statement? = null
         try {
             connectionDb = Database.getConnection()
             stmt = connectionDb.createStatement()
-            val students = mutableListOf<String>()
+            val students = mutableListOf<Pair<Int, String>>()
 
-            val query = "SELECT name FROM students"
+            val query = "SELECT id, name FROM students"
             val rs = stmt.executeQuery(query)
 
             while (rs.next()){
-                students.add(rs.getString("name"))
+                students.add(Pair(rs.getString("id").toInt(),rs.getString("name")))
             }
             stmt.close()
             connectionDb.close()
@@ -76,29 +74,50 @@ class StudentRepository(){
     }
 
     fun deleteStudents(): Result<Unit>{
-        var connection: Connection? = null
+        var connectionDb: Connection? = null
         var statement: Statement? = null
         try {
-            connection=Database.getConnection()
-            connection.autoCommit = false
-            statement = connection.createStatement()
+            connectionDb=Database.getConnection()
+            connectionDb.autoCommit = false
+            statement = connectionDb.createStatement()
             val query = "DELETE FROM students"
             statement.executeQuery(query)
-            connection.close()
+            connectionDb.close()
             statement.close()
             return Result.success(Unit)
         }
         catch (e:Exception){
-            connection?.close()
+            connectionDb?.close()
             statement?.close()
             return Result.failure(e)
         }
         finally {
-            connection?.autoCommit = true
+            connectionDb?.autoCommit = true
         }
     }
 
-    fun deleteStudent(studentId: Int){
+    fun deleteStudent(studentId: Int): Result<Unit>{
+        var connectionDb: Connection? = null
+        var statement: Statement? = null
+        try {
+            connectionDb=Database.getConnection()
+            connectionDb.autoCommit = false
+            statement = connectionDb.prepareStatement("DELETE FROM students WHERE id = (?)")
+            statement.setString(1, studentId.toString())
 
+            statement.executeQuery()
+            connectionDb.close()
+            statement.close()
+            return Result.success(Unit)
+        }
+        catch (e:Exception){
+            connectionDb?.close()
+            statement?.close()
+            return Result.failure(e)
+        }
+        finally {
+            connectionDb?.autoCommit = true
+        }
     }
+
 }

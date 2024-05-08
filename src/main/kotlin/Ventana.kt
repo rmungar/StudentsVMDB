@@ -107,7 +107,7 @@ fun estudiantes(studentsViewModel: IStudentsVM, estudiante:String){
                             modifier = Modifier
                                 .wrapContentSize()
                                 .background(Color.White),
-                            value = estudiante,
+                            value = estudiante.second,
                             enabled = false,
                             onValueChange = {},
                             trailingIcon = {
