@@ -135,7 +135,7 @@ fun estudiantes(studentsViewModel: IStudentsVM, estudiante:String){
                 modifier = Modifier
                     .align(Alignment.CenterVertically),
                 onClick = {
-                    //tudentsViewModel.guardarEstudiante()
+                    studentsViewModel.guardarEstudiante()
                 }
             ){
                 Text("GUARDAR CAMBIOS\n          Y SALIR")

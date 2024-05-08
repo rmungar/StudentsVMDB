@@ -73,50 +73,28 @@ class StudentRepository(){
         return Result.success(Unit)
     }
 
-    fun deleteStudents(): Result<Unit>{
-        var connectionDb: Connection? = null
-        var statement: Statement? = null
-        try {
-            connectionDb=Database.getConnection()
-            connectionDb.autoCommit = false
-            statement = connectionDb.createStatement()
-            val query = "DELETE FROM students"
-            statement.executeQuery(query)
-            connectionDb.close()
-            statement.close()
-            return Result.success(Unit)
-        }
-        catch (e:Exception){
-            connectionDb?.close()
-            statement?.close()
-            return Result.failure(e)
-        }
-        finally {
-            connectionDb?.autoCommit = true
-        }
-    }
 
     fun deleteStudent(studentId: Int): Result<Unit>{
         var connectionDb: Connection? = null
         var statement: Statement? = null
         try {
-            connectionDb=Database.getConnection()
+            connectionDb = Database.getConnection()
             connectionDb.autoCommit = false
             statement = connectionDb.prepareStatement("DELETE FROM students WHERE id = (?)")
             statement.setString(1, studentId.toString())
-
             statement.executeQuery()
-            connectionDb.close()
-            statement.close()
+            connectionDb.autoCommit = true
             return Result.success(Unit)
         }
         catch (e:Exception){
+            connectionDb?.autoCommit = true
             connectionDb?.close()
             statement?.close()
             return Result.failure(e)
         }
         finally {
-            connectionDb?.autoCommit = true
+            connectionDb?.close()
+            statement?.close()
         }
     }
 

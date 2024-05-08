@@ -30,7 +30,7 @@ interface IStudentsVM {
 
     fun cargarEstudiantes()
 
-    fun guardarEstudiante(lista: List<String>)
+    fun guardarEstudiante()
 
     fun showInfoMesssage(show: Boolean)
 

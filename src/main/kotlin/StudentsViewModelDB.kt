@@ -47,7 +47,11 @@ class StudentsViewModelDB:IStudentsVM {
         _students.addAll(studentRepository.getAllStudents().getOrThrow())
     }
 
-    override fun guardarEstudiante(lista: List<String>) {
+    override fun guardarEstudiante() {
+        val lista = mutableListOf("")
+        students.forEach {
+            lista.add(it.second)
+        }
         studentRepository.updateStudents(lista)
     }
 
@@ -56,7 +60,7 @@ class StudentsViewModelDB:IStudentsVM {
     }
 
     override fun vaciarEstudiantes() {
-        studentRepository.deleteStudents()
+        students.clear()
     }
 
     override fun estudianteSeleccionado(indice: Int) {
@@ -64,8 +68,15 @@ class StudentsViewModelDB:IStudentsVM {
     }
 
     private fun contadorIDS(): Int{
-        var cont = _students[_students.size - 1].first
-        cont ++
-        return cont
+        if (_students.size > 0){
+            var cont = _students[_students.size - 1].first
+            cont ++
+            return cont
+        }
+        else{
+            var cont = 0
+            cont ++
+            return cont
+        }
     }
 }

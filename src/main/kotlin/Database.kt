@@ -13,7 +13,7 @@ object Database {
             // Asegurarse de que el driver JDBC de MySQL esté disponible
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (e: ClassNotFoundException) {
-            e.printStackTrace();
+            e.message
         }
     }
 

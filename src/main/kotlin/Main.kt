@@ -11,7 +11,8 @@ fun main() = application{
         onCloseRequest = ::exitApplication
     ){
         Ventanas(
-            studentsViewModel)
+            studentsViewModel
+        )
     }
 
 }
