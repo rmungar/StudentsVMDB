@@ -1,12 +1,10 @@
-package ViewModel
-
-import ViewModel.IStudentsVM.Companion.MAXCARACTERES
-import Repository.StudentRepository
+import IStudentsVM.Companion.MAXCARACTERES
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.snapshots.SnapshotStateList
 
-class StudentsViewModelDB: IStudentsVM {
+class StudentsViewModelDB:IStudentsVM {
 
 
 
@@ -41,8 +39,8 @@ class StudentsViewModelDB: IStudentsVM {
     }
 
     override fun borrarEstudiante(indice: Int){
-        val estudiante = _students[indice]
-        studentRepository.deleteStudent(indiceSeleccionado.value)
+        _students.removeAt(indice)
+        studentRepository.deleteStudent(indice)
     }
 
     override fun cargarEstudiantes() {
@@ -50,9 +48,7 @@ class StudentsViewModelDB: IStudentsVM {
     }
 
     override fun guardarEstudiante() {
-
-        studentRepository.updateStudents(students)
-
+        studentRepository.updateStudents(_students)
     }
 
     override fun showInfoMesssage(show: Boolean) {
@@ -60,11 +56,12 @@ class StudentsViewModelDB: IStudentsVM {
     }
 
     override fun vaciarEstudiantes() {
-        _students.clear()
+        students.clear()
     }
 
     override fun estudianteSeleccionado(indice: Int) {
         _selectedIndex.value = indice
     }
+
 
 }

@@ -30,11 +30,4 @@ object Database {
         TODO()
     }
 
-    fun closeConnection(connection: Connection){
-        try {
-            connection.close()
-        }catch (e: SQLException){
-            TODO()
-        }
-    }
 }
