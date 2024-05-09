@@ -1,4 +1,7 @@
-import IStudentsVM.Companion.MAXCARACTERES
+
+import Repository.StudentRepository
+import ViewModel.IStudentsVM
+import ViewModel.IStudentsVM.Companion.MAXCARACTERES
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
