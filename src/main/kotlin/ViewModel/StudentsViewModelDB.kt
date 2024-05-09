@@ -1,10 +1,12 @@
-import IStudentsVM.Companion.MAXCARACTERES
+package ViewModel
+
+import ViewModel.IStudentsVM.Companion.MAXCARACTERES
+import Repository.StudentRepository
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.SnapshotStateList
 
-class StudentsViewModelDB:IStudentsVM {
+class StudentsViewModelDB: IStudentsVM {
 
 
 
@@ -13,7 +15,7 @@ class StudentsViewModelDB:IStudentsVM {
     private val _newStudent = mutableStateOf("")
     override val newStudent: State<String> = _newStudent
 
-    private val _students = mutableStateListOf<Pair<Int,String>>()
+    private val _students = mutableStateListOf<String>()
     override var students = _students
 
     private val _showInfoMessage = mutableStateOf(false)
@@ -27,7 +29,7 @@ class StudentsViewModelDB:IStudentsVM {
 
     override fun addEstudiante() {
         if (_newStudent.value.isNotBlank()) {
-            _students.add(Pair(contadorIDS(),_newStudent.value.trim()))
+            _students.add(_newStudent.value.trim())
             _newStudent.value = ""
         }
     }
@@ -40,7 +42,7 @@ class StudentsViewModelDB:IStudentsVM {
 
     override fun borrarEstudiante(indice: Int){
         val estudiante = _students[indice]
-        studentRepository.deleteStudent(estudiante.first)
+        studentRepository.deleteStudent(indiceSeleccionado.value)
     }
 
     override fun cargarEstudiantes() {
@@ -48,11 +50,9 @@ class StudentsViewModelDB:IStudentsVM {
     }
 
     override fun guardarEstudiante() {
-        val lista = mutableListOf("")
-        students.forEach {
-            lista.add(it.second)
-        }
-        studentRepository.updateStudents(lista)
+
+        studentRepository.updateStudents(students)
+
     }
 
     override fun showInfoMesssage(show: Boolean) {
@@ -60,23 +60,11 @@ class StudentsViewModelDB:IStudentsVM {
     }
 
     override fun vaciarEstudiantes() {
-        students.clear()
+        _students.clear()
     }
 
     override fun estudianteSeleccionado(indice: Int) {
         _selectedIndex.value = indice
     }
 
-    private fun contadorIDS(): Int{
-        if (_students.size > 0){
-            var cont = _students[_students.size - 1].first
-            cont ++
-            return cont
-        }
-        else{
-            var cont = 0
-            cont ++
-            return cont
-        }
-    }
 }

@@ -1,3 +1,6 @@
+package Repository
+
+import Database.Database
 import java.sql.Connection
 import java.sql.SQLException
 import java.sql.Statement
@@ -5,20 +8,20 @@ import java.sql.Statement
 class StudentRepository(){
 
 // NO HAY QUE TOCAR NADA, YA FUNCIONA SIN EL .USE
-    fun getAllStudents(): Result<List<Pair<Int,String>>> {
+    fun getAllStudents(): Result<List<String>> {
 
         var connectionDb: Connection? = null
         var stmt : Statement? = null
         try {
             connectionDb = Database.getConnection()
             stmt = connectionDb.createStatement()
-            val students = mutableListOf<Pair<Int, String>>()
+            val students = mutableListOf<String>()
 
             val query = "SELECT id, name FROM students"
             val rs = stmt.executeQuery(query)
 
             while (rs.next()){
-                students.add(Pair(rs.getString("id").toInt(),rs.getString("name")))
+                students.add(rs.getString("name"))
             }
             stmt.close()
             connectionDb.close()

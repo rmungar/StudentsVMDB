@@ -1,3 +1,5 @@
+package ViewModel
+
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
@@ -16,7 +18,7 @@ interface IStudentsVM {
 
     val newStudent: State<String>
 
-    val students: SnapshotStateList<Pair<Int,String>>
+    val students: SnapshotStateList<String>
 
     val showInfoMessage: State<Boolean>
 
